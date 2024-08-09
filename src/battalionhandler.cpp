@@ -42,7 +42,7 @@ void BattalionHandler::spawn(Group group, const std::vector<BattalionSpawnInfo> 
             std::vector<Vector2> shiftedTroops;
             shiftedTroops.resize(info.troops.size());
             std::transform(info.troops.begin(), info.troops.end(), shiftedTroops.begin(), [&](Vector2 v)
-                           { return Vector2Add(v, Vector2Scale(m_worldBounds, 0.5)); });
+                           { return Vector2Add(v, Vector2Scale(m_worldBounds, 0.25)); });
 
             std::shared_ptr<Battalion> battalion = std::make_shared<Battalion>(info.id, group, btype, shiftedTroops);
             vec.push_back(battalion);
@@ -89,7 +89,10 @@ void BattalionHandler::updateTargets()
         if (battalion->getLookoutRatio() < threshold)
         {
             std::shared_ptr<Battalion> target = getTarget(battalion);
-            battalion->m_target = target;
+            if (battalion->getLookoutRatio(target))
+            {
+                battalion->m_target = target;
+            }
         }
     }
     for (auto &battalion : m_defenderBattalions)
@@ -97,7 +100,10 @@ void BattalionHandler::updateTargets()
         if (battalion->getLookoutRatio() < threshold)
         {
             std::shared_ptr<Battalion> target = getTarget(battalion);
-            battalion->m_target = target;
+            if (battalion->getLookoutRatio(target))
+            {
+                battalion->m_target = target;
+            }
         }
     }
 }
