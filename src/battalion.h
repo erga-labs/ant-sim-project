@@ -49,7 +49,8 @@ public:
     float getLookoutRatio() const;
     int getTroopCount() const { return m_troops.size(); }
     int getInitialTroopCount() const { return m_initialTroopCount; }
-    void draw(bool selected, Texture2D spritesheet) const;
+    void draw(const Texture &spritesheet) const;
+    void drawRange() const;
     void update(float deltaTime);
 
 private:

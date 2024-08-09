@@ -54,11 +54,16 @@ void BattalionHandler::drawAll() const
 {
     for (const auto &b : m_attackerBattalions)
     {
-        b->draw(b == m_selectedBattalion.lock(), m_troopSpriteSheet);
+        b->draw(m_troopSpriteSheet);
     }
     for (const auto &b : m_defenderBattalions)
     {
-        b->draw(b == m_selectedBattalion.lock(), m_troopSpriteSheet);
+        b->draw(m_troopSpriteSheet);
+    }
+
+    if (auto b = m_selectedBattalion.lock())
+    {
+        b->drawRange();
     }
 }
 

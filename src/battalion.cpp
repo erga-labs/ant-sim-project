@@ -100,14 +100,13 @@ int GetStartingYPosition(Group group, BType btype, TroopState state)
     }
 }
 
-void Battalion::draw(bool selected, Texture2D spritesheet) const
+void Battalion::draw(const Texture &spritesheet) const
 {
     const Color color = const_colors[(int)m_group][(int)m_btype];
-    const uint8_t alpha = selected ? 30 : 10;
 
     const Rectangle rect = {m_center.x, m_center.y, (float)getTroopCount(), 1.0};
     const Vector2 origin = {(float)getTroopCount() / 2, 0.5};
-    DrawRectanglePro(rect, origin, m_rotation, {color.r, color.g, color.b, alpha});
+    DrawRectanglePro(rect, origin, m_rotation, {color.r, color.g, color.b, 10});
 
     const float desiredWidth = 1.0f;  // Desired width of the troop sprite
     const float desiredHeight = 1.0f; // Desired height of the troop sprite
@@ -116,7 +115,7 @@ void Battalion::draw(bool selected, Texture2D spritesheet) const
     const int frameHeight = 16;
 
     // m_center Debug
-    // DrawCircle(m_center.x, m_center.y, 0.5, BLACK);
+    DrawCircleV(m_center, 0.3, BLACK);
 
     for (const auto &troop : m_troops)
     {
@@ -134,6 +133,19 @@ void Battalion::draw(bool selected, Texture2D spritesheet) const
         float rotation = 0.0f;
 
         DrawTexturePro(spritesheet, sourceRec, destRec, origin, rotation, WHITE);
+    }
+}
+
+void Battalion::drawRange() const
+{
+    Color color = const_colors[(int)m_group][(int)m_btype];
+    color.a = 15;
+    const float attackRange = const_attackRange[(int)m_btype];
+    const float lookoutRange = const_lookoutRange[(int)m_btype];
+    for (const auto &troop : m_troops)
+    {
+        DrawCircleV(troop.position, attackRange, color);
+        DrawCircleV(troop.position, lookoutRange, color);
     }
 }
 
